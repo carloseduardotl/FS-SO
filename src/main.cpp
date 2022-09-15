@@ -48,7 +48,7 @@ int main()
             std::getline(ss, substr, ',');
             params.push_back(substr);
         }
-        disk.add_file(params[0][0], std::stoi(params[1]), std::stoi(params[2]));
+        disk.start_file(params[0][0], std::stoi(params[1]), std::stoi(params[2]));
     }
     if(files.eof())
     {
@@ -59,10 +59,11 @@ int main()
     std::cout << disk.get_current_state() << std::endl;
     std::cout << disk.get_number_of_blocks() << std::endl;
 
-    std::vector<char> blocks = disk.get_blocks();
+    std::vector<block> blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {
-        std::cout << blocks[i] << " ";
+        std::cout << blocks[i].name << " ";
     }
+    std::cout << std::endl << disk.ger_number_of_free_blocks() << std::endl;
     return 0;
 }
