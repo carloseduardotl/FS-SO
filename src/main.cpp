@@ -84,7 +84,7 @@ int main()
         std::cout << blocks[i].name << " ";
     }
     std::cout << std::endl;
-    disk.delete_file('A', 2, 0);
+    disk.delete_file('A', 3);
     blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {

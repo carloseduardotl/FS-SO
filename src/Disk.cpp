@@ -145,12 +145,27 @@ bool Disk::add_file(char name, int size, int process_id)
     }
 }
 
-bool Disk::delete_file(char name, int origin_process_id, int priority)
-{
+bool Disk::delete_file(char name, int origin_process_id)
+{   
+    process current_process;
+    bool process_found = false;
+    for(int i=0; i<processes.size(); i++)
+    {
+        if(processes[i].id == origin_process_id)
+        {
+            current_process = processes[i];
+            process_found = true;
+            break;
+        }
+    }
+    if(!process_found)
+    {
+        return false;
+    }
     bool file_deleted = false;
     for(int i=0; i<blocks.size(); i++)
     {
-        if(blocks[i].name == name && ((blocks[i].process_id == origin_process_id) || priority == 0))
+        if(blocks[i].name == name && ((blocks[i].process_id == origin_process_id) || current_process.priority == 0))
         {
             blocks[i].name = '0';
             blocks[i].process_id = 0;
