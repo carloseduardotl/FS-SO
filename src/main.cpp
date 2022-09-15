@@ -69,7 +69,7 @@ int main()
     }
 
     std::vector<block> blocks = disk.get_blocks();
-    for(i=0; i<blocks.size(); i++)
+    for(i=0; i<int(blocks.size()); i++)
     {
         std::cout << blocks[i].name << " ";
     }
@@ -117,7 +117,7 @@ int main()
     std::cout << std::endl;
     disk.delete_file('A', 1);*/
     blocks = disk.get_blocks();
-    for(i=0; i<blocks.size(); i++)
+    for(i=0; i<int(blocks.size()); i++)
     {
         std::cout << blocks[i].name << " ";
     }
