@@ -76,8 +76,10 @@ int main()
     {
         std::cout << blocks[i].name << " ";
     }
-    std::cout << std::endl << "Number of free blocks: " << disk.get_number_of_free_blocks() << std::endl;
+    std::cout << std::endl << "Quantidade de Blocos Livres: " << disk.get_number_of_free_blocks() << std::endl << std::endl;
+    std::cout << "Sistema de arquivos" << std::endl << std::endl;
 
+    int counter = 1;
     while(std::getline(files, line))
     {
         std::stringstream ss(line);
@@ -88,6 +90,9 @@ int main()
             std::getline(ss, substr, ',');
             params.push_back(substr);
         }
+
+        std::cout << counter << "º Operação - ";
+        counter++;
 
         int process_id = std::stoi(params[0]);
         int operation_type = std::stoi(params[1]);
@@ -140,6 +145,6 @@ int main()
     {
         std::cout << blocks[i].name << " ";
     }
-    std::cout << std::endl << "Number of free blocks: " << disk.get_number_of_free_blocks() << std::endl;
+    std::cout << std::endl << "Quantidade de Blocos Livres: " << disk.get_number_of_free_blocks() << std::endl;
     return 0;
 }
