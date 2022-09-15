@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <math.h>
 
 enum allocation
 {
@@ -37,6 +38,7 @@ class Disk
 
     void add_process(int id, int priority, int process_time);
     std::vector<process> get_processes();
+    bool process_exists(int id);
 
     void set_current_state(int state);
     allocation get_current_state();

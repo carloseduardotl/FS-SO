@@ -26,6 +26,18 @@ std::vector<process> Disk::get_processes()
     return processes;
 }
 
+bool Disk::process_exists(int id)
+{
+    for(int i=0; i<processes.size(); i++)
+    {
+        if(processes[i].id == id)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Disk::set_current_state(int state)
 {
     switch (state)
@@ -119,6 +131,14 @@ bool Disk::add_file(char name, int size, int process_id)
     {
         return false;
     }
+    if(!process_exists(process_id))
+    {
+        return false;
+    }
+
+    int real_size = ceil(size * 1.1);
+    int allocated_size = real_size;
+    int previous_block = -1;
     switch (current_allocation)
     {
     case contiguous:
@@ -135,6 +155,31 @@ bool Disk::add_file(char name, int size, int process_id)
                     }
                     return true;
                 }
+            }
+        }
+        return false;
+        break;
+    case linked:
+        if(get_number_of_free_blocks() < real_size)
+        {
+            return false;
+        }
+        for(int i=0; i<blocks.size(); i++)
+        {
+            if(blocks[i].name == '0')
+            {
+                blocks[i].name = name;
+                blocks[i].process_id = process_id;
+                allocated_size--;
+                if(previous_block != -1)
+                {
+                    blocks[previous_block].next_block = i;
+                }
+                previous_block = i;
+            }
+            if(allocated_size == 0)
+            {
+                return true;
             }
         }
         return false;

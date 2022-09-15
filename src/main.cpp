@@ -77,14 +77,14 @@ int main()
         std::cout << blocks[i].name << " ";
     }
     std::cout << std::endl << disk.get_number_of_free_blocks() << std::endl;
-    disk.add_file('A', 3, 1);
+    disk.add_file('A', 11, 1);
     blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {
         std::cout << blocks[i].name << " ";
     }
     std::cout << std::endl;
-    disk.delete_file('A', 3);
+    disk.delete_file('A', 1);
     blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {
