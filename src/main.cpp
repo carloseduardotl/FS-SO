@@ -20,9 +20,19 @@ int main()
     std::string line;
     std::getline(files, line);
     disk.set_current_state(std::stoi(line));
+    if(files.eof())
+    {
+        std::cout << "Error reading files" << std::endl;
+        return 1;
+    }
 
     std::getline(files, line);
     disk.set_number_of_blocks(std::stoi(line));
+    if(files.eof())
+    {
+        std::cout << "Error reading files" << std::endl;
+        return 1;
+    }
 
     std::getline(files, line);
     int number_of_files = std::stoi(line);
@@ -38,10 +48,21 @@ int main()
             std::getline(ss, substr, ',');
             params.push_back(substr);
         }
-             
+        disk.add_file(params[0][0], std::stoi(params[1]), std::stoi(params[2]));
+    }
+    if(files.eof())
+    {
+        std::cout << "Error reading files" << std::endl;
+        return 1;
     }
 
     std::cout << disk.get_current_state() << std::endl;
     std::cout << disk.get_number_of_blocks() << std::endl;
+
+    std::vector<char> blocks = disk.get_blocks();
+    for(i=0; i<blocks.size(); i++)
+    {
+        std::cout << blocks[i] << " ";
+    }
     return 0;
 }

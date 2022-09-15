@@ -22,4 +22,7 @@ class Disk
 
     void set_number_of_blocks(int number_of_blocks);
     int get_number_of_blocks();
+    std::vector<char> get_blocks();
+
+    bool add_file(char name, int starting_block, int size);
 };
