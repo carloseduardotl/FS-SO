@@ -86,11 +86,6 @@ int main()
             params.push_back(substr);
         }
 
-        /*for(int i = 0; i<params.size(); i++)
-        {
-            std::cout << params[i] << " ";
-        }
-        std::cout << "op: " << params[1] << std::endl;*/
         int process_id = std::stoi(params[0]);
         int operation_type = std::stoi(params[1]);
         char name = params[2][1];
@@ -114,12 +109,7 @@ int main()
         }
     }
     
-
-    //std::cout << disk.get_current_state() << std::endl;
-    //std::cout << disk.get_number_of_blocks() << std::endl;
-
-    
-    /*disk.add_file('A', 11, 1);
+    /*disk.add_file('A', 10, 1);
     blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {

@@ -156,7 +156,7 @@ bool Disk::add_file(char name, int size, int process_id)
             {
                 if(get_contiguous_free_blocks(i) >= size)
                 {
-                    for(size_t j=i; j<i+size; j++)
+                    for(int j=i; j<i+size; j++)
                     {
                         blocks[j].name = name;
                         blocks[j].process_id = process_id;
@@ -193,10 +193,13 @@ bool Disk::add_file(char name, int size, int process_id)
         }
         return false;
         break;
-
+    }
     case indexed:
+    {
+        bool first_allocated_block = true;
         if(get_number_of_free_blocks() < size+1)
         {
+            set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço)");
             return false;
         }
         for(size_t i=0; i<blocks.size(); i++)
@@ -221,6 +224,7 @@ bool Disk::add_file(char name, int size, int process_id)
         }
         return true;
         break;
+    }
     default:
         break;
     }
@@ -242,6 +246,7 @@ bool Disk::delete_file(char name, int origin_process_id)
     }
     if(!process_found)
     {
+        set_error_msg("O processo " + std::to_string(origin_process_id) + " não pode criar o arquivo " + name + " (processo não existe)");
         return false;
     }
     bool file_deleted = false;
