@@ -18,21 +18,38 @@ int main()
     }
 
     std::string line;
+
+    while(std::getline(processes, line))
+    {   
+        std::stringstream ss(line);
+        int id, priority, process_time;
+        while(ss.good())
+        {
+            std::string substr;
+            std::getline(ss, substr, ',');
+            id = std::stoi(substr);
+            std::getline(ss, substr, ',');
+            priority = std::stoi(substr);
+            std::getline(ss, substr, ',');
+            process_time = std::stoi(substr);
+        }
+        disk.add_process(id, priority, process_time);
+    }
+
+    /*std::vector<process> processes_vector = disk.get_processes();
+    while(processes_vector.size() > 0)
+    {
+        std::cout << "Process ID: " << processes_vector[0].id << std::endl;
+        std::cout << "Process Priority: " << processes_vector[0].priority << std::endl;
+        std::cout << "Process Time: " << processes_vector[0].process_time << std::endl;
+        processes_vector.erase(processes_vector.begin());
+    }*/
+
     std::getline(files, line);
     disk.set_current_state(std::stoi(line));
-    if(files.eof())
-    {
-        std::cout << "Error reading files" << std::endl;
-        return 1;
-    }
 
     std::getline(files, line);
     disk.set_number_of_blocks(std::stoi(line));
-    if(files.eof())
-    {
-        std::cout << "Error reading files" << std::endl;
-        return 1;
-    }
 
     std::getline(files, line);
     int number_of_files = std::stoi(line);
@@ -50,11 +67,6 @@ int main()
         }
         disk.start_file(params[0][0], std::stoi(params[1]), std::stoi(params[2]));
     }
-    if(files.eof())
-    {
-        std::cout << "Error reading files" << std::endl;
-        return 1;
-    }
 
     std::cout << disk.get_current_state() << std::endl;
     std::cout << disk.get_number_of_blocks() << std::endl;
@@ -65,5 +77,18 @@ int main()
         std::cout << blocks[i].name << " ";
     }
     std::cout << std::endl << disk.get_number_of_free_blocks() << std::endl;
+    disk.add_file('A', 3, 1);
+    blocks = disk.get_blocks();
+    for(i=0; i<blocks.size(); i++)
+    {
+        std::cout << blocks[i].name << " ";
+    }
+    std::cout << std::endl;
+    disk.delete_file('A', 2, 0);
+    blocks = disk.get_blocks();
+    for(i=0; i<blocks.size(); i++)
+    {
+        std::cout << blocks[i].name << " ";
+    }
     return 0;
 }

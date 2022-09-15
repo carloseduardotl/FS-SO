@@ -13,15 +13,30 @@ typedef struct block
     char name;
     int next_block;
     int process_id;
+    char indexed_file;
 } block;
+
+typedef struct process
+{
+    int id;
+    int priority;
+    int process_time;
+} process;
 
 class Disk 
 {
     private:
     allocation current_allocation;
     std::vector<block> blocks;
+    std::vector<process> processes;
 
     public:
+
+    Disk();
+    ~Disk();
+
+    void add_process(int id, int priority, int process_time);
+    std::vector<process> get_processes();
 
     void set_current_state(int state);
     allocation get_current_state();

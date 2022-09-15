@@ -1,5 +1,31 @@
 #include <Disk.h>
 
+Disk::Disk()
+{
+    blocks.clear();
+    processes.clear();
+}
+
+Disk::~Disk()
+{
+    blocks.clear();
+    processes.clear();
+}
+
+void Disk::add_process(int id, int priority, int process_time)
+{
+    process p;
+    p.id = id;
+    p.priority = priority;
+    p.process_time = process_time;
+    processes.push_back(p);
+}
+
+std::vector<process> Disk::get_processes()
+{
+    return processes;
+}
+
 void Disk::set_current_state(int state)
 {
     switch (state)
