@@ -78,6 +78,7 @@ void Disk::set_number_of_blocks(int number_of_blocks)
         blocks[i].name = '0';
         blocks[i].next_block = -1;
         blocks[i].process_id = 0;
+        blocks[i].indexed_file = -1;
     }
 }
 
@@ -192,7 +193,34 @@ bool Disk::add_file(char name, int size, int process_id)
         }
         return false;
         break;
-    }
+
+    case indexed:
+        if(get_number_of_free_blocks() < size+1)
+        {
+            return false;
+        }
+        for(int i=0; i<blocks.size(); i++)
+        {
+            if(blocks[i].name == '0')
+            {
+                if(first_allocated_block == true)
+                {
+                    blocks[i].name = 'I';
+                    blocks[i].process_id = process_id;
+                    blocks[i].indexed_file = name;
+                    first_allocated_block = false;
+                }
+                else
+                {
+                    blocks[i].name = name;
+                    blocks[i].process_id = process_id;
+                    size--;
+                }
+            }
+            if(size <= 0) break;
+        }
+        return true;
+        break;
     default:
         break;
     }
@@ -219,10 +247,12 @@ bool Disk::delete_file(char name, int origin_process_id)
     bool file_deleted = false;
     for(int i=0; i<int(blocks.size()); i++)
     {
-        if(blocks[i].name == name && ((blocks[i].process_id == origin_process_id) || current_process.priority == 0))
+        if(((blocks[i].name == name) || (blocks[i].indexed_file == name)) && ((blocks[i].process_id == origin_process_id) || current_process.priority == 0))
         {
             blocks[i].name = '0';
             blocks[i].process_id = 0;
+            blocks[i].next_block = -1;
+            blocks[i].indexed_file = -1;
             file_deleted = true;
         }
     }
