@@ -102,7 +102,7 @@ int main()
         disk.set_process_time_count(process_id, process_time_counter + 1);
         if(process_time_counter == disk.get_process(process_id).process_time)
         {
-            disk.set_error_msg("O processo " + std::to_string(process_id) + " já encerrou sua execução.");
+            disk.set_error_msg("O processo " + std::to_string(process_id) + " já encerrou sua execução.\n");
         }
         if(operation_type == 0)
         {
@@ -114,7 +114,7 @@ int main()
             else
             {
                 std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Falha" << std::endl;
-                std::cout << disk.get_error_msg() << std::endl << std::endl;
+                std::cout << disk.get_error_msg() << std::endl;
             }
         }
         else
@@ -127,9 +127,10 @@ int main()
             else
             {
                 std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Falha" << std::endl;
-                std::cout << disk.get_error_msg() << std::endl << std::endl;
+                std::cout << disk.get_error_msg() << std::endl;
             }
         }
+        disk.set_error_msg("");
     }
     
     /*disk.add_file('A', 10, 1);

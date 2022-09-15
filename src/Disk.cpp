@@ -163,12 +163,12 @@ bool Disk::add_file(char name, int size, int process_id)
 {
     if(get_number_of_free_blocks() < size)
     {
-        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço)");
+        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço).\n");
         return false;
     }
     if(!process_exists(process_id))
     {
-        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (processo não existe)");
+        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (processo não existe).\n");
         return false;
     }
     switch (current_allocation)
@@ -189,7 +189,7 @@ bool Disk::add_file(char name, int size, int process_id)
                 }
             }
         }
-        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço)");
+        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço).\n");
         return false;
         break;
     case linked:
@@ -223,7 +223,7 @@ bool Disk::add_file(char name, int size, int process_id)
         bool first_allocated_block = true;
         if(get_number_of_free_blocks() < size+1)
         {
-            set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço)");
+            set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço).\n");
             return false;
         }
         for(size_t i=0; i<blocks.size(); i++)
@@ -259,6 +259,7 @@ bool Disk::delete_file(char name, int origin_process_id)
 {   
     process current_process;
     bool process_found = false;
+    bool block_found = false;
     for(int i=0; i<int(processes.size()); i++)
     {
         if(processes[i].id == origin_process_id)
@@ -270,24 +271,42 @@ bool Disk::delete_file(char name, int origin_process_id)
     }
     if(!process_found)
     {
-        set_error_msg("O processo " + std::to_string(origin_process_id) + " não pode criar o arquivo " + name + " (processo não existe)");
+        set_error_msg("O processo " + std::to_string(origin_process_id) + " não pode deletar o arquivo " + name + " (processo não existe).\n");
         return false;
     }
     bool file_deleted = false;
     for(int i=0; i<int(blocks.size()); i++)
     {
-        if(((blocks[i].name == name) || (blocks[i].indexed_file == name)) && ((blocks[i].process_id == origin_process_id) || current_process.priority == 0))
+        if((blocks[i].name == name) || (blocks[i].indexed_file == name))
         {
+            block_found = true;
+            if((blocks[i].process_id == origin_process_id) || (current_process.priority == 0))
+            {
             blocks[i].name = '0';
             blocks[i].process_id = 0;
             blocks[i].next_block = -1;
             blocks[i].indexed_file = -1;
             file_deleted = true;
+            }
         }
     }
     if(file_deleted)
     {
         return true;
+    }
+    if(!block_found)
+    {  
+        set_error_msg(get_error_msg() + "O processo " + std::to_string(origin_process_id) + " não pode deletar o arquivo " + name + " (arquivo não existe).\n");
+        if(current_process.priority != 0)
+        {
+            set_error_msg(get_error_msg() + "O processo " + std::to_string(origin_process_id) + " não pode deletar um arquivo que não foi criado por ele.\n");
+        }
+        return false;
+    }
+    if(current_process.priority != 0)
+    {
+        set_error_msg(get_error_msg() + "O processo " + std::to_string(origin_process_id) + " não pode deletar um arquivo que não foi criado por ele.\n");
+        return false;
     }
     return false;
 }
