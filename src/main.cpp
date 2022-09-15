@@ -121,12 +121,12 @@ int main()
         {
             if(disk.delete_file(name ,process_id) && process_time_counter < disk.get_process(process_id).process_time)
             {
-                std::cout << "Operação " << process_time_counter << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Sucesso" << std::endl;
+                std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Sucesso" << std::endl;
                 std::cout << "O processo " << process_id << " deletou o arquivo " << name << std::endl << std::endl;
             }
             else
             {
-                std::cout << "Operação " << process_time_counter << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Falha" << std::endl;
+                std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Falha" << std::endl;
                 std::cout << disk.get_error_msg() << std::endl << std::endl;
             }
         }
