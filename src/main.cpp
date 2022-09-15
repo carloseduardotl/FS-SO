@@ -91,15 +91,26 @@ int main()
             std::cout << params[i] << " ";
         }
         std::cout << "op: " << params[1] << std::endl;*/
-
-        if(std::stoi(params[1]) == 0)
+        int process_id = std::stoi(params[0]);
+        int operation_type = std::stoi(params[1]);
+        char name = params[2][1];
+        int size = std::stoi(params[3]);
+        if(operation_type == 0)
         {
-            std::cout << "add file: " << params[2][1] << std::endl;
-            disk.add_file(params[2][1], std::stoi(params[3]), std::stoi(params[0]));
+            if(disk.add_file(name, size, process_id))
+            {
+                std::cout << "Operação " << 1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl;
+                // Adicionar informações extras da criação do processo
+            }
+            else
+            {
+                std::cout << "Operação " << 1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Falha" << std::endl;
+                std::cout << disk.get_error_msg() << std::endl;
+            }
         }
         else
         {
-            disk.delete_file(params[2][1], std::stoi(params[0]));
+            disk.delete_file(name ,process_id);
         }
     }
     

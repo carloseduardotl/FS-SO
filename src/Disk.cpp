@@ -1,5 +1,4 @@
 #include <Disk.h>
-
 Disk::Disk()
 {
     blocks.clear();
@@ -28,7 +27,7 @@ std::vector<process> Disk::get_processes()
 
 bool Disk::process_exists(int id)
 {
-    for(int i=0; i<processes.size(); i++)
+    for(int i=0; i<int(processes.size()); i++)
     {
         if(processes[i].id == id)
         {
@@ -56,6 +55,16 @@ void Disk::set_current_state(int state)
     }
 }
 
+void Disk::set_error_msg(std::string msg)
+{
+    error_msg = msg;
+}
+
+std::string Disk::get_error_msg()
+{
+    return error_msg;
+}
+
 allocation Disk::get_current_state()
 {
     return current_allocation;
@@ -64,7 +73,7 @@ allocation Disk::get_current_state()
 void Disk::set_number_of_blocks(int number_of_blocks)
 {
     blocks.resize(number_of_blocks);
-    for(int i=0; i<blocks.size(); i++)
+    for(int i=0; i<int(blocks.size()); i++)
     {
         blocks[i].name = '0';
         blocks[i].next_block = -1;
@@ -85,7 +94,7 @@ std::vector<block> Disk::get_blocks()
 int Disk::get_number_of_free_blocks()
 {
     int number_of_free_blocks = 0;
-    for(int i=0; i<blocks.size(); i++)
+    for(int i=0; i<int(blocks.size()); i++)
     {
         if(blocks[i].name == '0')
         {
@@ -98,7 +107,7 @@ int Disk::get_number_of_free_blocks()
 int Disk::get_contiguous_free_blocks(int position)
 {
     int number_of_free_blocks = 0;
-    for(int i=position; i<blocks.size(); i++)
+    for(int i=position; i<int(blocks.size()); i++)
     {
         if(blocks[i].name == '0')
         {
@@ -114,7 +123,7 @@ int Disk::get_contiguous_free_blocks(int position)
 
 bool Disk::start_file(char name, int starting_block, int size)
 {
-    if(starting_block + size > blocks.size())
+    if(starting_block + size > int(blocks.size()))
     {
         return false;
     }
@@ -129,20 +138,18 @@ bool Disk::add_file(char name, int size, int process_id)
 {
     if(get_number_of_free_blocks() < size)
     {
+        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço)");
         return false;
     }
     if(!process_exists(process_id))
     {
+        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (processo não existe)");
         return false;
     }
-
-    int real_size = ceil(size * 1.1);
-    int allocated_size = real_size;
-    int previous_block = -1;
     switch (current_allocation)
     {
     case contiguous:
-        for(int i=0; i<blocks.size(); i++)
+        for(int i=0; i<int(blocks.size()); i++)
         {
             if(blocks[i].name == '0')
             {
@@ -157,14 +164,15 @@ bool Disk::add_file(char name, int size, int process_id)
                 }
             }
         }
+        set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço)");
         return false;
         break;
     case linked:
-        if(get_number_of_free_blocks() < real_size)
-        {
-            return false;
-        }
-        for(int i=0; i<blocks.size(); i++)
+    {
+        int real_size = ceil(size * 1.1);
+        int allocated_size = real_size;
+        int previous_block = -1;
+        for(int i=0; i<int(blocks.size()); i++)
         {
             if(blocks[i].name == '0')
             {
@@ -184,17 +192,18 @@ bool Disk::add_file(char name, int size, int process_id)
         }
         return false;
         break;
-    
+    }
     default:
         break;
     }
+    return false;
 }
 
 bool Disk::delete_file(char name, int origin_process_id)
 {   
     process current_process;
     bool process_found = false;
-    for(int i=0; i<processes.size(); i++)
+    for(int i=0; i<int(processes.size()); i++)
     {
         if(processes[i].id == origin_process_id)
         {
@@ -208,7 +217,7 @@ bool Disk::delete_file(char name, int origin_process_id)
         return false;
     }
     bool file_deleted = false;
-    for(int i=0; i<blocks.size(); i++)
+    for(int i=0; i<int(blocks.size()); i++)
     {
         if(blocks[i].name == name && ((blocks[i].process_id == origin_process_id) || current_process.priority == 0))
         {

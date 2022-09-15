@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <math.h>
+#include <string>
 
 enum allocation
 {
@@ -30,6 +31,7 @@ class Disk
     allocation current_allocation;
     std::vector<block> blocks;
     std::vector<process> processes;
+    std::string error_msg = "";
 
     public:
 
@@ -48,6 +50,9 @@ class Disk
     std::vector<block> get_blocks();
     int get_number_of_free_blocks();
     int get_contiguous_free_blocks(int position);
+
+    void set_error_msg(std::string msg);
+    std::string get_error_msg();
 
     bool start_file(char name, int starting_block, int size);
     bool add_file(char name, int size, int process_id);
