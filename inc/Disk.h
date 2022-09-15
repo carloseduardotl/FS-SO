@@ -17,7 +17,7 @@ class Disk
 
     public:
 
-    void set_current_state(allocation state);
+    void set_current_state(int state);
     allocation get_current_state();
 
     void set_number_of_blocks(int number_of_blocks);

@@ -1,8 +1,21 @@
 #include <Disk.h>
 
-void Disk::set_current_state(allocation state)
+void Disk::set_current_state(int state)
 {
-    current_allocation = state;
+    switch (state)
+    {
+    case 1:
+        current_allocation = contiguous;
+        break;
+    case 2:
+        current_allocation = linked;
+        break;
+    case 3:
+        current_allocation = indexed;
+        break;    
+    default:
+        break;
+    }
 }
 
 allocation Disk::get_current_state()
