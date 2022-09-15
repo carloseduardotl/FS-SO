@@ -68,27 +68,59 @@ int main()
         disk.start_file(params[0][0], std::stoi(params[1]), std::stoi(params[2]));
     }
 
-    std::cout << disk.get_current_state() << std::endl;
-    std::cout << disk.get_number_of_blocks() << std::endl;
-
     std::vector<block> blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {
         std::cout << blocks[i].name << " ";
     }
-    std::cout << std::endl << disk.get_number_of_free_blocks() << std::endl;
-    disk.add_file('A', 11, 1);
+    std::cout << std::endl << "Number of free blocks: " << disk.get_number_of_free_blocks() << std::endl;
+
+    while(std::getline(files, line))
+    {
+        std::stringstream ss(line);
+        std::vector<std::string> params;
+        while (ss.good())
+        {
+            std::string substr;
+            std::getline(ss, substr, ',');
+            params.push_back(substr);
+        }
+
+        /*for(int i = 0; i<params.size(); i++)
+        {
+            std::cout << params[i] << " ";
+        }
+        std::cout << "op: " << params[1] << std::endl;*/
+
+        if(std::stoi(params[1]) == 0)
+        {
+            std::cout << "add file: " << params[2][1] << std::endl;
+            disk.add_file(params[2][1], std::stoi(params[3]), std::stoi(params[0]));
+        }
+        else
+        {
+            disk.delete_file(params[2][1], std::stoi(params[0]));
+        }
+    }
+    
+
+    //std::cout << disk.get_current_state() << std::endl;
+    //std::cout << disk.get_number_of_blocks() << std::endl;
+
+    
+    /*disk.add_file('A', 11, 1);
     blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {
         std::cout << blocks[i].name << " ";
     }
     std::cout << std::endl;
-    disk.delete_file('A', 1);
+    disk.delete_file('A', 1);*/
     blocks = disk.get_blocks();
     for(i=0; i<blocks.size(); i++)
     {
         std::cout << blocks[i].name << " ";
     }
+    std::cout << std::endl << "Number of free blocks: " << disk.get_number_of_free_blocks() << std::endl;
     return 0;
 }
