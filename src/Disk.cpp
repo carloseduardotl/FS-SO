@@ -28,7 +28,7 @@ std::vector<process> Disk::get_processes()
 
 bool Disk::process_exists(int id)
 {
-    for(int i=0; i<processes.size(); i++)
+    for(size_t i=0; i<processes.size(); i++)
     {
         if(processes[i].id == id)
         {
@@ -64,7 +64,7 @@ allocation Disk::get_current_state()
 void Disk::set_number_of_blocks(int number_of_blocks)
 {
     blocks.resize(number_of_blocks);
-    for(int i=0; i<blocks.size(); i++)
+    for(size_t i=0; i<blocks.size(); i++)
     {
         blocks[i].name = '0';
         blocks[i].next_block = -1;
@@ -85,7 +85,7 @@ std::vector<block> Disk::get_blocks()
 int Disk::get_number_of_free_blocks()
 {
     int number_of_free_blocks = 0;
-    for(int i=0; i<blocks.size(); i++)
+    for(size_t i=0; i<blocks.size(); i++)
     {
         if(blocks[i].name == '0')
         {
@@ -98,7 +98,7 @@ int Disk::get_number_of_free_blocks()
 int Disk::get_contiguous_free_blocks(int position)
 {
     int number_of_free_blocks = 0;
-    for(int i=position; i<blocks.size(); i++)
+    for(size_t i=position; i<blocks.size(); i++)
     {
         if(blocks[i].name == '0')
         {
@@ -142,7 +142,7 @@ bool Disk::add_file(char name, int size, int process_id)
     switch (current_allocation)
     {
     case contiguous:
-        for(int i=0; i<blocks.size(); i++)
+        for(size_t i=0; i<blocks.size(); i++)
         {
             if(blocks[i].name == '0')
             {
@@ -164,7 +164,7 @@ bool Disk::add_file(char name, int size, int process_id)
         {
             return false;
         }
-        for(int i=0; i<blocks.size(); i++)
+        for(size_t i=0; i<blocks.size(); i++)
         {
             if(blocks[i].name == '0')
             {
@@ -194,7 +194,7 @@ bool Disk::delete_file(char name, int origin_process_id)
 {   
     process current_process;
     bool process_found = false;
-    for(int i=0; i<processes.size(); i++)
+    for(size_t i=0; i<processes.size(); i++)
     {
         if(processes[i].id == origin_process_id)
         {
