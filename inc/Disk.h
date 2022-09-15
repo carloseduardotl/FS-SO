@@ -30,6 +30,7 @@ class Disk
     int get_number_of_blocks();
     std::vector<block> get_blocks();
     int get_number_of_free_blocks();
+    int get_contiguous_free_blocks(int position);
 
     bool start_file(char name, int starting_block, int size);
     bool add_file(char name, int size, int process_id);

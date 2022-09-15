@@ -46,15 +46,32 @@ std::vector<block> Disk::get_blocks()
 
 int Disk::get_number_of_free_blocks()
 {
-    int free_blocks = 0;
+    int number_of_free_blocks = 0;
     for(int i=0; i<blocks.size(); i++)
     {
         if(blocks[i].name == '0')
         {
-            free_blocks++;
+            number_of_free_blocks++;
         }
     }
-    return free_blocks;
+    return number_of_free_blocks;
+}
+
+int Disk::get_contiguous_free_blocks(int position)
+{
+    int number_of_free_blocks = 0;
+    for(int i=position; i<blocks.size(); i++)
+    {
+        if(blocks[i].name == '0')
+        {
+            number_of_free_blocks++;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return number_of_free_blocks;
 }
 
 bool Disk::start_file(char name, int starting_block, int size)
@@ -72,10 +89,29 @@ bool Disk::start_file(char name, int starting_block, int size)
 
 bool Disk::add_file(char name, int size, int process_id)
 {
+    if(get_number_of_free_blocks() < size)
+    {
+        return false;
+    }
     switch (current_allocation)
     {
     case contiguous:
-    
+        for(int i=0; i<blocks.size(); i++)
+        {
+            if(blocks[i].name == '0')
+            {
+                if(get_contiguous_free_blocks(i) >= size)
+                {
+                    for(int j=i; j<i+size; j++)
+                    {
+                        blocks[j].name = name;
+                        blocks[j].process_id = process_id;
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
         break;
     
     default:
