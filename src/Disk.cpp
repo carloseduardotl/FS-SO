@@ -44,7 +44,7 @@ std::vector<block> Disk::get_blocks()
     return blocks;
 }
 
-int Disk::ger_number_of_free_blocks()
+int Disk::get_number_of_free_blocks()
 {
     int free_blocks = 0;
     for(int i=0; i<blocks.size(); i++)

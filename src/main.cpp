@@ -64,6 +64,6 @@ int main()
     {
         std::cout << blocks[i].name << " ";
     }
-    std::cout << std::endl << disk.ger_number_of_free_blocks() << std::endl;
+    std::cout << std::endl << disk.get_number_of_free_blocks() << std::endl;
     return 0;
 }
