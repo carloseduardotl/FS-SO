@@ -23,6 +23,7 @@ typedef struct process
     int id;
     int priority;
     int process_time;
+    int time_counter = 0;
 } process;
 
 class Disk 
@@ -40,6 +41,8 @@ class Disk
 
     void add_process(int id, int priority, int process_time);
     std::vector<process> get_processes();
+    process get_process(int id);
+    void set_process_time_count(int id, int time_count);
     bool process_exists(int id);
 
     void set_current_state(int state);

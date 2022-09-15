@@ -11,6 +11,30 @@ Disk::~Disk()
     processes.clear();
 }
 
+process Disk::get_process(int id)
+{
+    for(int i=0; i<int(processes.size()); i++)
+    {
+        if(processes[i].id == id)
+        {
+            return processes[i];
+        }
+    }
+    process p; // return empty process
+    return p;
+}
+
+void Disk::set_process_time_count(int id, int time_count)
+{
+    for(int i=0; i<int(processes.size()); i++)
+    {
+        if(processes[i].id == id)
+        {
+            processes[i].time_counter = time_count;
+        }
+    }
+}
+
 void Disk::add_process(int id, int priority, int process_time)
 {
     process p;

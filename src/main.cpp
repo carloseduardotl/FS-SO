@@ -56,7 +56,7 @@ int main()
     int i = 0;
     for(i=0; i<number_of_files; i++)
     {
-        std::getline(files, line);   
+        std::getline(files, line);
         std::vector<std::string> params;
         std::stringstream ss(line);
         while (ss.good()) 
@@ -65,7 +65,10 @@ int main()
             std::getline(ss, substr, ',');
             params.push_back(substr);
         }
-        disk.start_file(params[0][0], std::stoi(params[1]), std::stoi(params[2]));
+        int name = params[0][0];
+        int starting_block = std::stoi(params[1]);
+        int size = std::stoi(params[2]);
+        disk.start_file(name, starting_block, size);
     }
 
     std::vector<block> blocks = disk.get_blocks();
@@ -90,22 +93,37 @@ int main()
         int operation_type = std::stoi(params[1]);
         char name = params[2][1];
         int size = std::stoi(params[3]);
+        int process_time_counter = disk.get_process(process_id).time_counter;
+        disk.set_process_time_count(process_id, process_time_counter + 1);
+        if(process_time_counter == disk.get_process(process_id).process_time)
+        {
+            disk.set_error_msg("O processo " + std::to_string(process_id) + " já encerrou sua execução.");
+        }
         if(operation_type == 0)
         {
-            if(disk.add_file(name, size, process_id))
+            if(disk.add_file(name, size, process_id) && process_time_counter < disk.get_process(process_id).process_time)
             {
-                std::cout << "Operação " << 1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl;
+                std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl << std::endl;
                 // Adicionar informações extras da criação do processo
             }
             else
             {
-                std::cout << "Operação " << 1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Falha" << std::endl;
-                std::cout << disk.get_error_msg() << std::endl;
+                std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Falha" << std::endl;
+                std::cout << disk.get_error_msg() << std::endl << std::endl;
             }
         }
         else
         {
-            disk.delete_file(name ,process_id);
+            if(disk.delete_file(name ,process_id) && process_time_counter < disk.get_process(process_id).process_time)
+            {
+                std::cout << "Operação " << process_time_counter << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Sucesso" << std::endl;
+                std::cout << "O processo " << process_id << " deletou o arquivo " << name << std::endl << std::endl;
+            }
+            else
+            {
+                std::cout << "Operação " << process_time_counter << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Falha" << std::endl;
+                std::cout << disk.get_error_msg() << std::endl << std::endl;
+            }
         }
     }
     
