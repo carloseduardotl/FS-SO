@@ -34,4 +34,5 @@ class Disk
 
     bool start_file(char name, int starting_block, int size);
     bool add_file(char name, int size, int process_id);
+    bool delete_file(char name, int origin_process_id, int priority);
 };

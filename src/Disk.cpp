@@ -118,3 +118,22 @@ bool Disk::add_file(char name, int size, int process_id)
         break;
     }
 }
+
+bool Disk::delete_file(char name, int origin_process_id, int priority)
+{
+    bool file_deleted = false;
+    for(int i=0; i<blocks.size(); i++)
+    {
+        if(blocks[i].name == name && ((blocks[i].process_id == origin_process_id) || priority == 0))
+        {
+            blocks[i].name = '0';
+            blocks[i].process_id = 0;
+            file_deleted = true;
+        }
+    }
+    if(file_deleted)
+    {
+        return true;
+    }
+    return false;
+}
