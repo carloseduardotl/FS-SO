@@ -156,7 +156,7 @@ bool Disk::add_file(char name, int size, int process_id)
             {
                 if(get_contiguous_free_blocks(i) >= size)
                 {
-                    for(int j=i; j<i+size; j++)
+                    for(size_t j=i; j<i+size; j++)
                     {
                         blocks[j].name = name;
                         blocks[j].process_id = process_id;
@@ -199,7 +199,7 @@ bool Disk::add_file(char name, int size, int process_id)
         {
             return false;
         }
-        for(int i=0; i<blocks.size(); i++)
+        for(size_t i=0; i<blocks.size(); i++)
         {
             if(blocks[i].name == '0')
             {
