@@ -63,6 +63,7 @@ bool Disk::process_exists(int id)
 
 void Disk::set_current_state(int state)
 {
+    // Defining the type of allocation
     switch (state)
     {
     case 1:
@@ -99,10 +100,10 @@ void Disk::set_number_of_blocks(int number_of_blocks)
     blocks.resize(number_of_blocks);
     for(int i=0; i<int(blocks.size()); i++)
     {
-        blocks[i].name = '0';
-        blocks[i].next_block = -1;
-        blocks[i].process_id = 0;
-        blocks[i].indexed_file = -1;
+        blocks[i].name = '0'; // get the name of the file
+        blocks[i].next_block = -1; //get the next block
+        blocks[i].process_id = 0; // get the process id
+        blocks[i].indexed_file = -1; // get the indexed file
     }
 }
 
@@ -178,18 +179,18 @@ bool Disk::add_file(char name, int size, int process_id, std::vector<int> * bloc
         {
             if(blocks[i].name == '0')
             {
-                if(get_contiguous_free_blocks(i) >= size)
+                if(get_contiguous_free_blocks(i) >= size) // Check if there are enough free blocks
                 {
                     for(int j=i; j<i+size; j++)
                     {
-                        blocks[j].name = name;
-                        blocks[j].process_id = process_id;
-                        blocks_vector->push_back(j);
+                        blocks[j].name = name; // get the name of the file
+                        blocks[j].process_id = process_id; // get the process id
+                        blocks_vector->push_back(j); // get the block number
                     }
                     return true;
                 }
             }
-        }
+        }        
         set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço).\n");
         return false;
         break;
@@ -207,15 +208,15 @@ bool Disk::add_file(char name, int size, int process_id, std::vector<int> * bloc
         {
             if(blocks[i].name == '0')
             {
-                blocks[i].name = name;
-                blocks[i].process_id = process_id;
-                allocated_size--;
-                if(previous_block != -1)
+                blocks[i].name = name; // get the name of the file
+                blocks[i].process_id = process_id; //get the process id
+                allocated_size--; //get the next block
+                if(previous_block != -1) // get the indexed file
                 {
                     blocks[previous_block].next_block = i;
                 }
                 previous_block = i;
-                blocks_vector->push_back(i);
+                blocks_vector->push_back(i); // get the block number
             }
             if(allocated_size == 0)
             {
@@ -239,18 +240,18 @@ bool Disk::add_file(char name, int size, int process_id, std::vector<int> * bloc
             {
                 if(first_allocated_block == true)
                 {
-                    blocks[i].name = 'I';
-                    blocks[i].process_id = process_id;
-                    blocks[i].indexed_file = name;
-                    first_allocated_block = false;
-                    blocks_vector->push_back(i);
+                    blocks[i].name = 'I'; // get the name of the file
+                    blocks[i].process_id = process_id; // get the process id
+                    blocks[i].indexed_file = name; // get the indexed file
+                    first_allocated_block = false; // get the next block
+                    blocks_vector->push_back(i);    //get the block number
                 }
                 else
                 {
-                    blocks[i].name = name;
-                    blocks[i].process_id = process_id;
-                    size--;
-                    blocks_vector->push_back(i);
+                    blocks[i].name = name; // get the name of the file
+                    blocks[i].process_id = process_id; // get the process id
+                    size--; // get the next block
+                    blocks_vector->push_back(i); // get the block number
                 }
             }
             if(size <= 0) break;
@@ -291,10 +292,10 @@ bool Disk::delete_file(char name, int origin_process_id)
             block_found = true;
             if((blocks[i].process_id == origin_process_id) || (current_process.priority == 0))
             {
-            blocks[i].name = '0';
-            blocks[i].process_id = 0;
-            blocks[i].next_block = -1;
-            blocks[i].indexed_file = -1;
+            blocks[i].name = '0'; // get the name of the file
+            blocks[i].process_id = 0; // get the process id
+            blocks[i].next_block = -1; // get the next block
+            blocks[i].indexed_file = -1; // get the indexed file
             file_deleted = true;
             }
         }
