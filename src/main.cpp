@@ -78,15 +78,13 @@ int main()
     {
         std::stringstream ss(line);
         std::vector<std::string> params;
-        //params.resize(4);
         while (ss.good())
         {
             std::string substr;
             std::getline(ss, substr, ',');
             params.push_back(substr);
-
-        //std::cout << "teste" << std::endl;
         }
+        params.push_back("0"); // Add a 0 to the end of the vector to avoid segmentation fault
 
         std::cout << counter << "º Operação - ";
         counter++;
