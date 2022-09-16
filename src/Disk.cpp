@@ -157,6 +157,7 @@ bool Disk::start_file(char name, int starting_block, int size)
     for(int i=starting_block; i<starting_block+size; i++)
     {
         blocks[i].name = name;
+        blocks[i].process_id = -1;
     }
     return true;
 }
