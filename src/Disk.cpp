@@ -3,6 +3,7 @@ Disk::Disk()
 {
     blocks.clear();
     processes.clear();
+    current_allocation = contiguous;
 }
 
 Disk::~Disk()

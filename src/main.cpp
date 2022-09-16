@@ -36,7 +36,7 @@ int main()
         disk.add_process(id, priority, process_time);
     }
     std::getline(files, line);
-    disk.set_current_state(std::stoi(line));
+    int current_state = std::stoi(line);
 
     std::getline(files, line);
     disk.set_number_of_blocks(std::stoi(line));
@@ -70,6 +70,7 @@ int main()
     }
     std::cout << std::endl << "Quantidade de Blocos Livres: " << disk.get_number_of_free_blocks() << std::endl << std::endl;
     std::cout << "Sistema de arquivos" << std::endl << std::endl;
+    disk.set_current_state(current_state);
 
     int counter = 1;
     int process_id, operation_type, process_time_counter;
@@ -77,11 +78,14 @@ int main()
     {
         std::stringstream ss(line);
         std::vector<std::string> params;
+        //params.resize(4);
         while (ss.good())
         {
             std::string substr;
             std::getline(ss, substr, ',');
             params.push_back(substr);
+
+        //std::cout << "teste" << std::endl;
         }
 
         std::cout << counter << "º Operação - ";
