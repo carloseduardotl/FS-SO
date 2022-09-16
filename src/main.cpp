@@ -100,7 +100,7 @@ int main()
         if(operation_type == 0)
         {
             std::vector<int> blocks;
-            if(disk.add_file(name, size, process_id, &blocks) && process_time_counter < disk.get_process(process_id).process_time)
+            if((process_time_counter < disk.get_process(process_id).process_time) && disk.add_file(name, size, process_id, &blocks))
             {
                 std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl;
                 std::cout << "Bloco(s): ";
@@ -124,7 +124,7 @@ int main()
         }
         else
         {
-            if(disk.delete_file(name ,process_id) && process_time_counter < disk.get_process(process_id).process_time)
+            if((process_time_counter < disk.get_process(process_id).process_time) && disk.delete_file(name ,process_id))
             {
                 std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Deletar o arquivo " << name << " => Sucesso" << std::endl;
                 std::cout << "O processo " << process_id << " deletou o arquivo " << name << std::endl << std::endl;
