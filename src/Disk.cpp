@@ -196,6 +196,11 @@ bool Disk::add_file(char name, int size, int process_id, std::vector<int> * bloc
     case linked:
     {
         int real_size = ceil(size * 1.1);
+        if(get_number_of_free_blocks() < real_size)
+        {
+            set_error_msg("O processo " + std::to_string(process_id) + " não pode criar o arquivo " + name + " (falta de espaço).\n");
+            return false;
+        }
         int allocated_size = real_size;
         int previous_block = -1;
         for(int i=0; i<int(blocks.size()); i++)

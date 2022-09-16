@@ -13,7 +13,7 @@ int main()
 
     if(!processes.is_open() || !files.is_open())
     {
-        std::cout << "Error opening files" << std::endl;
+        std::cout << "Erro ao abrir os arquivos" << std::endl;
         return 1;
     }
 
@@ -35,16 +35,6 @@ int main()
         }
         disk.add_process(id, priority, process_time);
     }
-
-    /*std::vector<process> processes_vector = disk.get_processes();
-    while(processes_vector.size() > 0)
-    {
-        std::cout << "Process ID: " << processes_vector[0].id << std::endl;
-        std::cout << "Process Priority: " << processes_vector[0].priority << std::endl;
-        std::cout << "Process Time: " << processes_vector[0].process_time << std::endl;
-        processes_vector.erase(processes_vector.begin());
-    }*/
-
     std::getline(files, line);
     disk.set_current_state(std::stoi(line));
 
@@ -54,6 +44,8 @@ int main()
     std::getline(files, line);
     int number_of_files = std::stoi(line);
     int i = 0;
+    char name;
+    int starting_block, size;
     for(i=0; i<number_of_files; i++)
     {
         std::getline(files, line);
@@ -65,9 +57,9 @@ int main()
             std::getline(ss, substr, ',');
             params.push_back(substr);
         }
-        int name = params[0][0];
-        int starting_block = std::stoi(params[1]);
-        int size = std::stoi(params[2]);
+        name = params[0][0];
+        starting_block = std::stoi(params[1]);
+        size = std::stoi(params[2]);
         disk.start_file(name, starting_block, size);
     }
 
@@ -80,6 +72,7 @@ int main()
     std::cout << "Sistema de arquivos" << std::endl << std::endl;
 
     int counter = 1;
+    int process_id, operation_type, process_time_counter;
     while(std::getline(files, line))
     {
         std::stringstream ss(line);
@@ -94,11 +87,11 @@ int main()
         std::cout << counter << "º Operação - ";
         counter++;
 
-        int process_id = std::stoi(params[0]);
-        int operation_type = std::stoi(params[1]);
-        char name = params[2][1];
-        int size = std::stoi(params[3]);
-        int process_time_counter = disk.get_process(process_id).time_counter;
+        process_id = std::stoi(params[0]);
+        operation_type = std::stoi(params[1]);
+        name = params[2][1];
+        size = std::stoi(params[3]);
+        process_time_counter = disk.get_process(process_id).time_counter;
         disk.set_process_time_count(process_id, process_time_counter + 1);
         if(process_time_counter == disk.get_process(process_id).process_time)
         {
@@ -110,13 +103,12 @@ int main()
             if(disk.add_file(name, size, process_id, &blocks) && process_time_counter < disk.get_process(process_id).process_time)
             {
                 std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl;
-                // Adicionar informações extras da criação do processo
                 std::cout << "Bloco(s): ";
                 for(int i = 0; i<int(blocks.size()); i++)
                 {
                     if(i==int(blocks.size())-1)
                     {
-                        std::cout << blocks[i] << std::endl << std::endl;
+                        std::cout << blocks[i] << std::endl << std::endl; // imprime o último bloco sem a vírgula
                     }
                     else
                     {
@@ -145,15 +137,6 @@ int main()
         }
         disk.set_error_msg("");
     }
-    
-    /*disk.add_file('A', 10, 1);
-    blocks = disk.get_blocks();
-    for(i=0; i<blocks.size(); i++)
-    {
-        std::cout << blocks[i].name << " ";
-    }
-    std::cout << std::endl;
-    disk.delete_file('A', 1);*/
     blocks = disk.get_blocks();
     for(i=0; i<int(blocks.size()); i++)
     {
