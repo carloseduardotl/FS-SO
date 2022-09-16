@@ -87,10 +87,10 @@ int main()
         std::cout << counter << "º Operação - ";
         counter++;
 
-        process_id = std::stoi(params[0]);
-        operation_type = std::stoi(params[1]);
-        name = params[2][1];
-        size = std::stoi(params[3]);
+        process_id = std::stoi(params[0]); // process id
+        operation_type = std::stoi(params[1]); // operation type
+        name = params[2][1]; // file name
+        size = std::stoi(params[3]); // file size
         process_time_counter = disk.get_process(process_id).time_counter;
         disk.set_process_time_count(process_id, process_time_counter + 1);
         if(process_time_counter == disk.get_process(process_id).process_time)
@@ -99,16 +99,16 @@ int main()
         }
         if(operation_type == 0)
         {
-            std::vector<int> blocks;
+            std::vector<int> blocks; // vector of blocks that the file occupies
             if(disk.add_file(name, size, process_id, &blocks) && process_time_counter < disk.get_process(process_id).process_time)
             {
                 std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl;
                 std::cout << "Bloco(s): ";
                 for(int i = 0; i<int(blocks.size()); i++)
                 {
-                    if(i==int(blocks.size())-1)
+                    if(i==int(blocks.size())-1) 
                     {
-                        std::cout << blocks[i] << std::endl << std::endl; // imprime o último bloco sem a vírgula
+                        std::cout << blocks[i] << std::endl << std::endl; //print the last block without the comma
                     }
                     else
                     {
@@ -137,7 +137,7 @@ int main()
         }
         disk.set_error_msg("");
     }
-    blocks = disk.get_blocks();
+    blocks = disk.get_blocks(); // update block vector
     for(i=0; i<int(blocks.size()); i++)
     {
         std::cout << blocks[i].name << " ";
