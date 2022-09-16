@@ -159,7 +159,7 @@ bool Disk::start_file(char name, int starting_block, int size)
     return true;
 }
 
-bool Disk::add_file(char name, int size, int process_id)
+bool Disk::add_file(char name, int size, int process_id, std::vector<int> * blocks_vector)
 {
     if(get_number_of_free_blocks() < size)
     {
@@ -184,6 +184,7 @@ bool Disk::add_file(char name, int size, int process_id)
                     {
                         blocks[j].name = name;
                         blocks[j].process_id = process_id;
+                        blocks_vector->push_back(j);
                     }
                     return true;
                 }
@@ -209,6 +210,7 @@ bool Disk::add_file(char name, int size, int process_id)
                     blocks[previous_block].next_block = i;
                 }
                 previous_block = i;
+                blocks_vector->push_back(i);
             }
             if(allocated_size == 0)
             {
@@ -236,12 +238,14 @@ bool Disk::add_file(char name, int size, int process_id)
                     blocks[i].process_id = process_id;
                     blocks[i].indexed_file = name;
                     first_allocated_block = false;
+                    blocks_vector->push_back(i);
                 }
                 else
                 {
                     blocks[i].name = name;
                     blocks[i].process_id = process_id;
                     size--;
+                    blocks_vector->push_back(i);
                 }
             }
             if(size <= 0) break;

@@ -58,6 +58,6 @@ class Disk
     std::string get_error_msg();
 
     bool start_file(char name, int starting_block, int size);
-    bool add_file(char name, int size, int process_id);
+    bool add_file(char name, int size, int process_id, std::vector<int> * blocks_vector);
     bool delete_file(char name, int origin_process_id);
 };

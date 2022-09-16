@@ -106,10 +106,23 @@ int main()
         }
         if(operation_type == 0)
         {
-            if(disk.add_file(name, size, process_id) && process_time_counter < disk.get_process(process_id).process_time)
+            std::vector<int> blocks;
+            if(disk.add_file(name, size, process_id, &blocks) && process_time_counter < disk.get_process(process_id).process_time)
             {
-                std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl << std::endl;
+                std::cout << "Operação " << process_time_counter+1 << " do Processo " << process_id << " - Criar o arquivo " << name << " => Sucesso" << std::endl;
                 // Adicionar informações extras da criação do processo
+                std::cout << "Bloco(s): ";
+                for(int i = 0; i<int(blocks.size()); i++)
+                {
+                    if(i==int(blocks.size())-1)
+                    {
+                        std::cout << blocks[i] << std::endl << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << blocks[i] << ", ";
+                    }
+                };
             }
             else
             {
